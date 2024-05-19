@@ -10,12 +10,13 @@ const PropertyCard = ({ property }) => {
   const { _id, images, location, description, bedrooms, bathrooms, parking, price } = property;
 
   return (
-    <Card sx={{ maxWidth: 345, m: 2 }}>
+    <Card sx={{ maxWidth: 600, m: 2 }}>
       <CardMedia
         component="img"
         height="140"
         image={images[0]} // Mostrar la primera imagen del carrusel
         alt={location.address}
+        sx={{ objectFit: 'cover' }}
       />
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">

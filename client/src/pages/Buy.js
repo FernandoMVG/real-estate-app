@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import PropertyCard from '../components/PropertyCard';
 import { Button } from '@mui/material';
+import './Styles.css';
 
 const Buy = () => {
   const [properties] = useState([
@@ -19,7 +20,7 @@ const Buy = () => {
       price: 250000,
     },
     {
-      _id: 2,
+      _id: 5,
       images: ['https://via.placeholder.com/350x200'], // Reemplaza con URLs de imágenes reales
       location: {
         address: 'Avenida Siempre Viva 742',
@@ -32,15 +33,60 @@ const Buy = () => {
       parking: false,
       price: 400000,
     },
+    ,
+    {
+      _id: 2,
+      images: ['https://via.placeholder.com/350x200'], // Reemplaza con URLs de imágenes reales
+      location: {
+        address: 'Avenida Siempre Viva 875',
+        city: 'REbolo',
+        state: 'Oregon',
+      },
+      description: 'Descripción de la propiedad 2. Lorem ipsum dolor sit amet...',
+      bedrooms: 4,
+      bathrooms: 3,
+      parking: false,
+      price: 400000,
+    },
+    {
+      _id: 3,
+      images: ['https://via.placeholder.com/350x200'], // Reemplaza con URLs de imágenes reales
+      location: {
+        address: 'Avenida Siempre Viva 772',
+        city: 'Springfield',
+        state: 'Oregon',
+      },
+      description: 'Descripción de la propiedad 2. Lorem ipsum dolor sit amet...',
+      bedrooms: 4,
+      bathrooms: 3,
+      parking: false,
+      price: 400000,
+    },
+    {
+      _id: 4,
+      images: ['https://via.placeholder.com/350x200','https://via.placeholder.com/350x200','https://via.placeholder.com/350x200'], // Reemplaza con URLs de imágenes reales
+      location: {
+        address: 'Avenida Siempre Viva 742',
+        city: 'Springfield',
+        state: 'Oregon',
+      },
+      description: 'Descripción de la propiedad 2. Lorem ipsum dolor sit amet...',
+      bedrooms: 4,
+      bathrooms: 3,
+      parking: false,
+      price: 400000,
+    }
     // Agrega más propiedades aquí...
   ]);
 
   return (
     <div className="container mx-auto p-4">
       <h2 className="text-2xl font-bold mb-4">Propiedades en Venta</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      <div className="grid-container">
         {properties.map((property) => (
-          <PropertyCard key={property._id} property={property} />
+          <div key={property._id}>
+            <PropertyCard property={property} />
+          </div>
         ))}
       </div>
     </div>
