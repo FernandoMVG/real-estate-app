@@ -1,34 +1,23 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { Grid, Typography } from '@mui/material';
+// Rent.js
+import React from 'react';
+import {Typography } from '@mui/material';
 import PropertyCard from '../components/PropertyCard';
+import { rentProperties } from '../propertiesData';
+import { Link } from 'react-router-dom';
 
 const Rent = () => {
-  const [properties, setProperties] = useState([]);
-
-  useEffect(() => {
-    const fetchProperties = async () => {
-      try {
-        const response = await axios.get('/api/properties?purpose=rent');
-        setProperties(response.data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchProperties();
-  }, []);
-
   return (
     <>
       <Typography variant="h4" align="center" sx={{ mt: 3 }}>
         Propiedades en Renta
       </Typography>
-      <Grid container justifyContent="center">
-        {properties.map((property) => (
-          <PropertyCard key={property._id} property={property} />
+      <div className="container mx-auto p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"> {/* Reemplaza Grid con clases de Tailwind CSS */}
+        {rentProperties.map((property) => (
+          <Link key={property._id} to={`/property/rent/${property._id}`}>
+            <PropertyCard property={property} />
+          </Link>
         ))}
-      </Grid>
+      </div>
     </>
   );
 };

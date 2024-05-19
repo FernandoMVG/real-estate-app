@@ -23,7 +23,7 @@
   .nav-links {
     display: flex;
     justify-content: center;
-    flex-grow: 1;
+    flex-grow: 2;
   }
   
   .nav-link {

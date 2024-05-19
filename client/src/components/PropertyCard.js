@@ -1,53 +1,38 @@
 import React from 'react';
-import { Card, CardContent, CardMedia, Typography, Grid, Box } from '@mui/material';
 import { Link } from 'react-router-dom';
-import HomeIcon from '@mui/icons-material/Home';
-import BathroomIcon from '@mui/icons-material/Bathroom';
+import BedroomParentIcon from '@mui/icons-material/BedroomParent';
+import BathtubIcon from '@mui/icons-material/Bathtub';
 import LocalParkingIcon from '@mui/icons-material/LocalParking';
-import { Button } from '@mui/material';
 
 const PropertyCard = ({ property }) => {
   const { _id, images, location, description, bedrooms, bathrooms, parking, price } = property;
 
   return (
-    <Card sx={{ maxWidth: 600, m: 2 }}>
-      <CardMedia
-        component="img"
-        height="140"
-        image={images[0]} // Mostrar la primera imagen del carrusel
-        alt={location.address}
-        sx={{ objectFit: 'cover' }}
-      />
-      <CardContent>
-        <Typography gutterBottom variant="h5" component="div">
-          {location.address}
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-          {description.substring(0, 100)}...
-        </Typography>
-        <Box sx={{ mt: 2 }}>
-          <Grid container spacing={1} alignItems="center">
-            <Grid item>
-              <HomeIcon /> {bedrooms}
-            </Grid>
-            <Grid item>
-              <BathroomIcon /> {bathrooms}
-            </Grid>
-            {parking && (
-              <Grid item>
-                <LocalParkingIcon />
-              </Grid>
-            )}
-          </Grid>
-        </Box>
-        <Typography variant="h6" sx={{ mt: 2 }}>
-          ${price}
-        </Typography>
-        <Button component={Link} to={`/property/${_id}`} variant="contained" sx={{ mt: 2 }}>
-          Ver más
-        </Button>
-      </CardContent>
-    </Card>
+    <Link to={`/property/buy/${_id}`} className="block rounded-lg shadow-lg overflow-hidden">
+      <img src={images[0]} alt={location.address} className="w-full h-48 object-cover" />
+      <div className="p-4">
+        <h3 className="text-lg font-semibold text-gray-900">{location.address}</h3>
+        <div className="h-24 overflow-hidden"> {/* Agrega un contenedor con altura fija */}
+          <p className="mt-2 text-gray-600">{description.substring(0, 100)}...</p>
+        </div>
+        <div className="mt-4 flex items-center">
+          <div className="flex items-center mr-4">
+            <BedroomParentIcon className="w-5 h-5 text-gray-500" />
+            <span className="ml-1 text-gray-700">{bedrooms}</span>
+          </div>
+          <div className="flex items-center mr-4">
+            <BathtubIcon className="w-5 h-5 text-gray-500" />
+            <span className="ml-1 text-gray-700">{bathrooms}</span>
+          </div>
+          {parking && (
+            <div className="flex items-center">
+              <LocalParkingIcon className="w-5 h-5 text-gray-500" />
+            </div>
+          )}
+        </div>
+        <p className="mt-4 text-lg font-semibold text-gray-900">${price}</p>
+      </div>
+    </Link>
   );
 };
 
