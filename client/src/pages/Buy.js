@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropertyCard from '../components/PropertyCard';
 import { Button } from '@mui/material';
-import './Styles.css';
+import '../Styles.css';
 
 const Buy = () => {
   const [properties] = useState([
