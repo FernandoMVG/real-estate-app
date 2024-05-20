@@ -4,6 +4,19 @@ import BedroomParentIcon from '@mui/icons-material/BedroomParent';
 import BathtubIcon from '@mui/icons-material/Bathtub';
 import LocalParkingIcon from '@mui/icons-material/LocalParking';
 
+const formatCurrency = (price) => {
+  return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(price);
+};
+
+// Componente que muestra el precio formateado
+const PropertyPrice = ({ price }) => {
+  return (
+    <p className="mt-4 text-lg font-semibold text-gray-900">
+      {formatCurrency(price)}
+    </p>
+  );
+};
+
 const PropertyCard = ({ property }) => {
   const { _id, images, location, description, bedrooms, bathrooms, parking, price } = property;
 
@@ -13,7 +26,7 @@ const PropertyCard = ({ property }) => {
       <div className="p-4">
         <h3 className="text-lg font-semibold text-gray-900">{location.address}</h3>
         <div className="h-24 overflow-hidden"> {/* Agrega un contenedor con altura fija */}
-          <p className="mt-2 text-gray-600">{description.substring(0, 100)}...</p>
+          <p className="mt-2 text-gray-600">{description.substring(0, 80)}...</p>
         </div>
         <div className="mt-4 flex items-center">
           <div className="flex items-center mr-4">
@@ -30,7 +43,7 @@ const PropertyCard = ({ property }) => {
             </div>
           )}
         </div>
-        <p className="mt-4 text-lg font-semibold text-gray-900">${price}</p>
+        <p className="mt-4 text-lg font-semibold text-gray-900"><PropertyPrice price={price} /></p>
       </div>
     </Link>
   );

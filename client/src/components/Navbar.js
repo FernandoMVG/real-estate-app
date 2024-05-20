@@ -23,9 +23,9 @@ const Logo = () => (
 // NavLinks component
 const NavLinks = () => (
   <div className="flex space-x-8">
-    <Link to="/buy" className="nav-link text-gray-600 hover:text-blue-500 transition-colors duration-300 relative">Comprar</Link>
-    <Link to="/rent" className="nav-link text-gray-600 hover:text-blue-500 transition-colors duration-300 relative">Rentar</Link>
-    <Link to="/finance" className="nav-link text-gray-600 hover:text-blue-500 transition-colors duration-300 relative">Financiar</Link>
+    <Link to="/buy" className="nav-link text-gray-600 font-bold hover:text-indigo-500 transition-colors duration-300 relative">Comprar</Link>
+    <Link to="/rent" className="nav-link text-gray-600 font-bold hover:text-indigo-500 transition-colors duration-300 relative">Rentar</Link>
+    <Link to="/finance" className="nav-link text-gray-600 font-bold hover:text-indigo-500 transition-colors duration-300 relative">Financiar</Link>
   </div>
 );
 
@@ -33,7 +33,7 @@ const NavLinks = () => (
 const UserMenu = ({ user }) => (
   <div className="flex items-center">
     {!user ? (
-      <Link to="/login" className="btn-primary text-white bg-blue-600 hover:bg-blue-700 transition-colors duration-300 px-4 py-2 rounded-md">Iniciar Sesión</Link>
+      <Link to="/login" className="btn-primary text-white bg-indigo-600 hover:bg-indigo-700 transition-colors duration-300 px-4 py-2 rounded-md">Iniciar Sesión</Link>
     ) : (
       <div className="flex items-center space-x-4">
         <div className="w-10 h-10 rounded-full overflow-hidden">

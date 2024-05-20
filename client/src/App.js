@@ -5,7 +5,6 @@ import Home from './pages/Home';
 import Buy from './pages/Buy';
 import Rent from './pages/Rent';
 import Finance from './pages/Finance';
-import PropertyDetails from './components/PropertyDetails';
 import LoginForm from './components/LoginForm';
 import UserDashboard from './components/UserDashboard';
 import PropertyDetailsBuy from './components/PropertyDetailsBuy';
