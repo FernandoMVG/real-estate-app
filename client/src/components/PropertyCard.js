@@ -4,28 +4,19 @@ import BedroomParentIcon from '@mui/icons-material/BedroomParent';
 import BathtubIcon from '@mui/icons-material/Bathtub';
 import LocalParkingIcon from '@mui/icons-material/LocalParking';
 
-const formatCurrency = (price) => {
-  return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(price);
-};
-
-// Componente que muestra el precio formateado
-const PropertyPrice = ({ price }) => {
-  return (
-    <p className="mt-4 text-lg font-semibold text-gray-900">
-      {formatCurrency(price)}
-    </p>
-  );
+const formatCurrency = (price, currency) => {
+  return new Intl.NumberFormat('en-US', { style: 'currency', currency: currency }).format(price);
 };
 
 const PropertyCard = ({ property }) => {
-  const { _id, images, location, description, bedrooms, bathrooms, parking, price } = property;
+  const { _id, profilePictures, address, description, bedrooms, bathrooms, parking, price } = property;
 
   return (
-    <Link to={`/property/buy/${_id}`} className="block rounded-lg shadow-lg overflow-hidden">
-      <img src={images[0]} alt={location.address} className="w-full h-48 object-cover" />
+    <Link to={`/property/${property.purpose === 'For Sale' ? 'buy' : 'rent'}/${_id}`} className="block rounded-lg shadow-lg overflow-hidden">
+      <img src={`https://${process.env.REACT_APP_BUCKET_NAME}.s3.${process.env.REACT_APP_BUCKET_REGION}.amazonaws.com/${profilePictures[0]?.url || 'placeholder-image.jpg'}`} alt={address.fullAddress} className="w-full h-48 object-cover" />
       <div className="p-4">
-        <h3 className="text-lg font-semibold text-gray-900">{location.address}</h3>
-        <div className="h-24 overflow-hidden"> {/* Agrega un contenedor con altura fija */}
+        <h3 className="text-lg font-semibold text-gray-900">{address.fullAddress}</h3>
+        <div className="h-24 overflow-hidden">
           <p className="mt-2 text-gray-600">{description.substring(0, 80)}...</p>
         </div>
         <div className="mt-4 flex items-center">
@@ -43,7 +34,9 @@ const PropertyCard = ({ property }) => {
             </div>
           )}
         </div>
-        <p className="mt-4 text-lg font-semibold text-gray-900"><PropertyPrice price={price} /></p>
+        <p className="mt-4 text-lg font-semibold text-gray-900">
+          {formatCurrency(price.amount.toString(), price.currency)}
+        </p>
       </div>
     </Link>
   );

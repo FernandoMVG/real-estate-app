@@ -1,19 +1,19 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import '../index.css';
 
 const Home = () => {
   return (
     <>
-      {/* Aquí quiero poner una imagen del mismo ancho de la pagina */}
-      <section className='h-full max-h-[640px] mb-8 xl:mb-4 bg-indigo-500'> {/* Ajusta el color de fondo */}
-      <img 
-        src="https://via.placeholder.com/1200x300" // Reemplaza con la ruta a tu imagen
-        alt="Imagen de fondo" 
-        className="w-full" 
-      />
+      <section className='h-full max-h-[640px] mb-8 xl:mb-4 bg-indigo-500'>
+        <img 
+          src="https://via.placeholder.com/1200x300" 
+          alt="Imagen de fondo" 
+          className="w-full" 
+        />
       </section> 
 
-      <section className='h-full max-h-[640px] mb-8 xl:mb-24 bg-indigo-500'> {/* Ajusta el color de fondo */}
+      <section className='h-full max-h-[640px] mb-8 xl:mb-24 bg-indigo-500'>
         <div className='flex flex-col lg:flex-row'>
           <div className='lg:ml-8 xl:ml-[135px] flex flex-col items-center lg:items-start text-center lg:text-left justify-center flex-1 px-4 lg:px-0'>
             <h1 className='text-4xl lg:text-[58px] font-semibold leading-none mb-6 text-white'>
@@ -27,14 +27,12 @@ const Home = () => {
               Explorar propiedades
             </Link>
           </div>
-          {/* image */}
           <div className='hidden flex-1 lg:flex justify-end items-end'>
-            <img src="https://via.placeholder.com/800x400" alt="casa" className="rounded-l-lg" /> {/* Ajusta la imagen */}
+            <img src="https://via.placeholder.com/800x400" alt="casa" className="rounded-l-lg" />
           </div>
         </div>
       </section>
 
-      {/* Sección de beneficios */}
       <section className="container mx-auto p-4 mb-12">
         <h2 className="text-2xl font-bold mb-4 text-indigo-500">¿Por qué elegirnos?</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
@@ -53,7 +51,6 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Sección de llamada a la acción */}
       <section className="container mx-auto p-4 bg-gray-100 rounded-lg shadow-md">
         <div className="flex flex-col md:flex-row justify-between items-center">
           <div className="text-center md:text-left mb-4 md:mb-0">

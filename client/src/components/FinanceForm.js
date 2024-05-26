@@ -1,5 +1,5 @@
+// src/components/FinanceForm.js
 import React, { useState } from 'react';
-import { TextField, Button, Typography, Grid, MenuItem } from '@mui/material';
 
 const FinanceForm = () => {
   const [amount, setAmount] = useState('');
@@ -12,41 +12,42 @@ const FinanceForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <Typography variant="h5" gutterBottom>
-        Financiar Propiedad
-      </Typography>
-      <Grid container spacing={2}>
-        <Grid item xs={12}>
-          <TextField
-            label="Cantidad"
-            type="number"
-            value={amount}
-            onChange={(e) => setAmount(e.target.value)}
-            fullWidth
-            required
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            select
-            label="Propiedad"
-            value={property}
-            onChange={(e) => setProperty(e.target.value)}
-            fullWidth
-            required
-          >
-            {/* Aquí puedes cargar las propiedades disponibles para financiamiento */}
-            <MenuItem value="propiedad1">Propiedad 1</MenuItem>
-            <MenuItem value="propiedad2">Propiedad 2</MenuItem>
-          </TextField>
-        </Grid>
-        <Grid item xs={12}>
-          <Button type="submit" variant="contained" fullWidth>
-            Solicitar Financiamiento
-          </Button>
-        </Grid>
-      </Grid>
+    <form onSubmit={handleSubmit} className="max-w-lg mx-auto p-4">
+      <h2 className="text-2xl font-bold text-center mb-4">Financiar Propiedad</h2>
+      <div className="mb-4">
+        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="amount">
+          Cantidad
+        </label>
+        <input
+          type="number"
+          id="amount"
+          value={amount}
+          onChange={(e) => setAmount(e.target.value)}
+          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          required
+        />
+      </div>
+      <div className="mb-4">
+        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="property">
+          Propiedad
+        </label>
+        <input
+          type="text"
+          id="property"
+          value={property}
+          onChange={(e) => setProperty(e.target.value)}
+          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          required
+        />
+      </div>
+      <div className="flex items-center justify-between">
+        <button
+          type="submit"
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+        >
+          Solicitar Financiamiento
+        </button>
+      </div>
     </form>
   );
 };

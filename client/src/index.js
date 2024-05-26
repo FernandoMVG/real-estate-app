@@ -1,19 +1,14 @@
+// src/index.js
 import React from 'react';
-import ReactDOM from 'react-dom/client';
+import { createRoot } from 'react-dom/client';
+import './index.css';
 import App from './App';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 
-// Crea un tema de Material UI (puedes personalizarlo)
-const theme = createTheme();
+const container = document.getElementById('root');
+const root = createRoot(container);
 
-// Obtiene la referencia al elemento root del HTML
-const root = ReactDOM.createRoot(document.getElementById('root'));
-
-// Renderiza la aplicación dentro del ThemeProvider
 root.render(
   <React.StrictMode>
-    <ThemeProvider theme={theme}>
-      <App />
-    </ThemeProvider>
+    <App />
   </React.StrictMode>
 );

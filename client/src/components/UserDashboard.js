@@ -1,44 +1,25 @@
-import React from 'react';
-import { Typography, Grid, List, ListItem, ListItemText } from '@mui/material';
+// src/pages/UserDashboard.js
+import React, { useContext } from 'react';
+import AuthContext from '../contexts/AuthContext';
 
 const UserDashboard = () => {
+  const { user } = useContext(AuthContext);
+
+  if (!user) {
+    console.log(user);
+    return <div className="container mx-auto p-4">Cargando...</div>;
+    
+  }
+
   return (
-    <Grid container spacing={3}>
-      <Grid item xs={12} md={4}>
-        <Typography variant="h6" gutterBottom>
-          Mis Propiedades Favoritas
-        </Typography>
-        <List>
-          {/* Aquí puedes cargar las propiedades favoritas del usuario */}
-          <ListItem>
-            <ListItemText primary="Propiedad 1" />
-          </ListItem>
-          <ListItem>
-            <ListItemText primary="Propiedad 2" />
-          </ListItem>
-        </List>
-      </Grid>
-      <Grid item xs={12} md={4}>
-        <Typography variant="h6" gutterBottom>
-          Mis Ofertas
-        </Typography>
-        <List>
-          {/* Aquí puedes cargar las ofertas del usuario */}
-          <ListItem>
-            <ListItemText primary="Oferta 1" secondary="Estado: Pendiente" />
-          </ListItem>
-          <ListItem>
-            <ListItemText primary="Oferta 2" secondary="Estado: Aceptada" />
-          </ListItem>
-        </List>
-      </Grid>
-      <Grid item xs={12} md={4}>
-        <Typography variant="h6" gutterBottom>
-          Vender/Rentar Propiedad
-        </Typography>
-        {/* Aquí puedes agregar formularios para vender o rentar propiedades */}
-      </Grid>
-    </Grid>
+    <div className="container mx-auto p-4">
+      <h2 className="text-2xl font-bold mb-4">Mi Dashboard</h2>
+      <div className="bg-white shadow-md rounded p-4">
+        <h3 className="text-xl font-semibold mb-4">Información del Usuario</h3>
+        <p><strong>Nombre de usuario:</strong> {user.username}</p>
+        <p><strong>Email:</strong> {user.email}</p>
+      </div>
+    </div>
   );
 };
 
