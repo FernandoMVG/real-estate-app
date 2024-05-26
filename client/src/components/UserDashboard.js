@@ -6,9 +6,7 @@ const UserDashboard = () => {
   const { user } = useContext(AuthContext);
 
   if (!user) {
-    console.log(user);
     return <div className="container mx-auto p-4">Cargando...</div>;
-    
   }
 
   return (

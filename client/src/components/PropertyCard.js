@@ -17,7 +17,7 @@ const PropertyCard = ({ property }) => {
       <div className="p-4">
         <h3 className="text-lg font-semibold text-gray-900">{address.fullAddress}</h3>
         <div className="h-24 overflow-hidden">
-          <p className="mt-2 text-gray-600">{description.substring(0, 80)}...</p>
+          <p className="mt-2 text-gray-600">{description.substring(0, 60)}...</p>
         </div>
         <div className="mt-4 flex items-center">
           <div className="flex items-center mr-4">

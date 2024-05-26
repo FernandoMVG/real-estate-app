@@ -7,7 +7,7 @@ import Buy from './pages/Buy';
 import Rent from './pages/Rent';
 import Finance from './pages/Finance';
 import LoginForm from './components/LoginForm';
-import SignupForm from './components/SignupForm'; // Asegúrate de que el nombre del archivo es correcto
+import SignupForm from './components/SignUpForm'; // Asegúrate de que el nombre del archivo es correcto
 import UserDashboard from './components/UserDashboard';
 import PropertyDetailsBuy from './pages/PropertyDetailsBuy';
 import PropertyDetailsRent from './pages/PropertyDetailsRent';

@@ -1,14 +1,23 @@
-// src/pages/Rent.js
 import React, { useState, useEffect } from 'react';
 import PropertyCard from '../components/PropertyCard';
+import Pagination from '../components/pagination';
+import Filters from '../components/Filters';
+import Sidebar from '../components/Sidebar';
 import { Link } from 'react-router-dom';
+import { IconButton } from '@mui/material';
+import FilterListIcon from '@mui/icons-material/FilterList';
 import api from '../api';
-import '../index.css';
 
 const Rent = () => {
   const [properties, setProperties] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize] = useState(5);
+  const [totalPages, setTotalPages] = useState(1);
+  const [search, setSearch] = useState('');
+  const [filters, setFilters] = useState({});
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   useEffect(() => {
     const fetchProperties = async () => {
@@ -17,10 +26,14 @@ const Rent = () => {
       try {
         const response = await api.get('/catalog', {
           params: {
-            filter: JSON.stringify({ purpose: 'For Rent' }),
+            page: currentPage,
+            pageSize,
+            search,
+            filter: JSON.stringify({ ...filters, purpose: 'For Rent' }),
           },
         });
         setProperties(response.data.catalog.data);
+        setTotalPages(Math.ceil(response.data.catalog.metadata.totalCount / pageSize));
       } catch (error) {
         setError(error.response ? error.response.data.error : 'Error al obtener las propiedades');
       } finally {
@@ -29,7 +42,29 @@ const Rent = () => {
     };
 
     fetchProperties();
-  }, []);
+  }, [currentPage, pageSize, search, filters]);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  const handleSearchChange = (e) => {
+    setSearch(e.target.value);
+  };
+
+  const handleFilterChange = (newFilters) => {
+    setFilters(newFilters);
+    setCurrentPage(1); // Reset to the first page on new filter
+  };
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    setCurrentPage(1); // Reset to the first page on new search
+  };
+
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
 
   return (
     <>
@@ -40,30 +75,58 @@ const Rent = () => {
               <span className="text-indigo-700">Renta</span> la casa que se acomode a ti.
             </h1>
             <p className="max-w mb-8 text-lg font-semibold text-gray-700 lg:text-[20px]">
-              Encuentra la casa perfecta para ti, ya sea alquilando o rentando. 
+              Encuentra la casa perfecta para ti, ya sea alquilando o rentando.
               Descubre opciones que se ajusten a tus necesidades y estilo de vida.
               Desde acogedores apartamentos hasta amplias casas familiares, nuestra selección ofrece una variedad de opciones para cada presupuesto. Comienza hoy mismo tu búsqueda y encuentra el hogar que realmente se acomode a ti.
             </p>
           </div>
+          {/* image */}
           <div className="hidden flex-1 lg:flex justify-end items-end ">
             <img src="https://via.placeholder.com/800x600" alt="casa alquiler" />
           </div>
         </div>
       </section>
       <div className="container mx-auto p-4">
-        <h2 className="text-2xl font-bold mb-4">Propiedades en Renta</h2>
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-2xl font-bold">Propiedades en Renta</h2>
+          <div className="flex items-center">
+            <form onSubmit={handleSearchSubmit} className="mr-4">
+              <input
+                type="text"
+                placeholder="Buscar propiedades..."
+                value={search}
+                onChange={handleSearchChange}
+                className="border border-gray-300 px-4 py-2 rounded-md"
+              />
+              <button type="submit" className="ml-2 px-4 py-2 bg-indigo-500 text-white rounded-md">Buscar</button>
+            </form>
+            <IconButton onClick={toggleSidebar} color="primary">
+              <FilterListIcon />
+            </IconButton>
+          </div>
+        </div>
+        <Sidebar isOpen={isSidebarOpen} onClose={toggleSidebar}>
+          <Filters onFilterChange={handleFilterChange} />
+        </Sidebar>
         {isLoading ? (
           <p>Cargando propiedades...</p>
         ) : error ? (
           <p>Error: {error}</p>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {properties.map((property) => (
-              <Link key={property._id} to={`/property/rent/${property._id}`}>
-                <PropertyCard property={property} />
-              </Link>
-            ))}
-          </div>
+          <>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              {properties.map((property) => (
+                <Link key={property._id} to={`/property/rent/${property._id}`}>
+                  <PropertyCard property={property} />
+                </Link>
+              ))}
+            </div>
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+            />
+          </>
         )}
       </div>
     </>

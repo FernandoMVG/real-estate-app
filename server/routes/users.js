@@ -6,7 +6,6 @@ const auth = require('../middleware/authToken.js');
 router.post('/', controllers.createUser);
 router.get('/:id', controllers.readUser);
 router.get('/me', auth.verifyToken, controllers.getAuthenticatedUser); // Nueva ruta
-router.get('/me', auth.verifyToken, userController.getMe);
 router.put('/:id', auth.verifyToken, controllers.updateUser);
 router.delete('/:id', auth.verifyToken, controllers.deleteUser);
 
