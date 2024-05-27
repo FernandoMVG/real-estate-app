@@ -1,7 +1,8 @@
-// src/components/SignupForm.js
-import React, { useState } from 'react';
+// src/components/SignUpForm.js
+import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../api';
+import { AuthContext } from '../contexts/AuthContext';
 
 const SignUpForm = () => {
   const [username, setUsername] = useState('');
@@ -10,10 +11,11 @@ const SignUpForm = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const { setUser } = useContext(AuthContext);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    setError(null); // Limpia el mensaje de error
+    setError(null);
 
     if (password !== confirmPassword) {
       setError('Las contraseñas no coinciden');
@@ -21,8 +23,13 @@ const SignUpForm = () => {
     }
 
     try {
-      await api.post('/users', { username, email, password });
-      navigate('/login'); // Redirige al usuario a la página de inicio de sesión
+      const response = await api.post('/users', { username, email, password });
+      const { accessToken, refreshToken, user } = response.data;
+      console.log('accessToken at SignUpForm component', accessToken);
+      localStorage.setItem('accessToken', accessToken);
+      localStorage.setItem('refreshToken', refreshToken);
+      setUser(user);
+      navigate('/dashboard');
     } catch (error) {
       setError(error.response?.data?.error || 'Error al registrarse');
     }

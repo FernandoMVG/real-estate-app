@@ -1,3 +1,4 @@
+// server/controllers/authController.js
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const User = require('../models/userModel');
@@ -15,7 +16,7 @@ const loginUser = async (req, res) => {
     const { error } = validateLogin(req.body);
     if (error) {
         return res.status(400).json({ error: error.details[0].message });
-    }   
+    }
 
     const user = await User.findOne({ email: req.body.email });
     if (!user) {
@@ -26,25 +27,16 @@ const loginUser = async (req, res) => {
         return res.status(401).json({ error: 'Invalid password' });
     }
 
-    // Generate access and refresh tokens
     const accessToken = generateAccessToken(user);
     const refreshToken = generateRefreshToken(user);
 
-    // Save refresh token in database
     user.refreshToken = refreshToken;
     await user.save();
 
-    // Set cookies
     res.cookie('auth-token', accessToken, { httpOnly: true, secure: true });
     res.cookie('refresh-token', refreshToken, { httpOnly: true, secure: true });
-    res.status(200).json({
-        message: 'Login successful',
-        accessToken,
-        refreshToken
-    });
-}
-
-
+    res.status(200).json({ accessToken, refreshToken });
+};
 
 const refreshToken = async (req, res) => {
     const refreshToken = req.cookies['refresh-token'];
@@ -58,14 +50,12 @@ const refreshToken = async (req, res) => {
         }
 
         const newAccessToken = generateAccessToken(user);
-
         res.cookie('auth-token', newAccessToken, { httpOnly: true, secure: true });
-        res.json({ accessToken: newAccessToken});
+        res.json({ accessToken: newAccessToken });
     } catch (error) {
         return res.status(403).send({ error: 'Invalid refresh token' });
     }
 };
-
 
 const logoutUser = async (req, res) => {
     const refreshToken = req.cookies['refresh-token'];
@@ -80,11 +70,10 @@ const logoutUser = async (req, res) => {
         }
         res.clearCookie('auth-token');
         res.clearCookie('refresh-token');
-        res.status(204)
+        res.status(204).send();
     } catch (error) {
         res.status(400).send({ error: 'Invalid token' });
     }
-}
-
+};
 
 module.exports = { loginUser, refreshToken, logoutUser };

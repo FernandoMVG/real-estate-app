@@ -6,18 +6,18 @@ import Home from './pages/Home';
 import Buy from './pages/Buy';
 import Rent from './pages/Rent';
 import Finance from './pages/Finance';
-import LoginForm from './components/LoginForm';
-import SignupForm from './components/SignUpForm'; // Asegúrate de que el nombre del archivo es correcto
-import UserDashboard from './components/UserDashboard';
 import PropertyDetailsBuy from './pages/PropertyDetailsBuy';
 import PropertyDetailsRent from './pages/PropertyDetailsRent';
-import { AuthProvider } from './contexts/AuthContext';
+import LoginForm from './components/LoginForm';
+import SignUpForm from './components/SignUpForm';
+import UserDashboard from './components/UserDashboard';
 import PrivateRoute from './components/PrivateRoute';
+import { AuthProvider } from './contexts/AuthContext';
 
 const App = () => {
   return (
-    <Router>
-      <AuthProvider>
+    <AuthProvider>
+      <Router>
         <Navbar />
         <div className="pt-16">
           <Routes>
@@ -28,12 +28,12 @@ const App = () => {
             <Route path="/property/buy/:id" element={<PropertyDetailsBuy />} />
             <Route path="/property/rent/:id" element={<PropertyDetailsRent />} />
             <Route path="/login" element={<LoginForm />} />
-            <Route path="/signup" element={<SignupForm />} />
+            <Route path="/signup" element={<SignUpForm />} />
             <Route path="/dashboard" element={<PrivateRoute><UserDashboard /></PrivateRoute>} />
           </Routes>
         </div>
-      </AuthProvider>
-    </Router>
+      </Router>
+    </AuthProvider>
   );
 };
 

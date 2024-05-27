@@ -4,49 +4,43 @@ import api from '../api';
 
 const AuthContext = createContext();
 
-export const AuthProvider = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const checkAuth = async () => {
+    const fetchUser = async () => {
       const token = localStorage.getItem('accessToken');
       if (token) {
         try {
-          const response = await api.get('/users/me', {
-            headers: { Authorization: `Bearer ${token}` }
-          });
+          const response = await api.get('/users/me');
+          console.log('response authcontext', response);
           setUser(response.data);
-          setIsAuthenticated(true);
         } catch (error) {
+          console.log('error fetch en AuthContext', error);
           console.error('Error verificando autenticación:', error);
-          localStorage.removeItem('accessToken');
-          localStorage.removeItem('refreshToken');
-          setIsAuthenticated(false);
         }
       }
     };
-    checkAuth();
+
+    fetchUser();
   }, []);
 
   const logout = async () => {
     try {
-      const refreshToken = localStorage.getItem('refreshToken');
-      await api.post('/auth/logout', { token: refreshToken });
+      await api.post('/auth/logout');
       localStorage.removeItem('accessToken');
       localStorage.removeItem('refreshToken');
-      setIsAuthenticated(false);
       setUser(null);
     } catch (error) {
-      console.error('Error cerrando sesión:', error);
+      console.error('Error al cerrar sesión:', error);
     }
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated, user, logout }}>
+    <AuthContext.Provider value={{ user, setUser, logout }}>
       {children}
     </AuthContext.Provider>
   );
 };
 
-export default AuthContext;
+export { AuthContext, AuthProvider };

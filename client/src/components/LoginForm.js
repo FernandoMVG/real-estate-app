@@ -2,34 +2,28 @@
 import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../api';
-import AuthContext from '../contexts/AuthContext';
+import { AuthContext } from '../contexts/AuthContext';
 
 const LoginForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
   const navigate = useNavigate();
-  const { setIsAuthenticated } = useContext(AuthContext);
+  const { setUser } = useContext(AuthContext);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    setError(null); // Limpia el mensaje de error
+    setError(null);
 
     try {
       const response = await api.post('/auth/login', { email, password });
-      const { accessToken, refreshToken } = response.data;
-
-      // Guarda los tokens en el localStorage
+      const { accessToken, refreshToken, user } = response.data;
+      console.log('accessToken at LoginForm component', accessToken);
       localStorage.setItem('accessToken', accessToken);
       localStorage.setItem('refreshToken', refreshToken);
-
-      // Actualiza el estado de autenticación
-      setIsAuthenticated(true);
-
-      // Redirige al usuario a la página principal o a su dashboard
-      navigate('/dashboard'); // Puedes cambiar '/' por '/dashboard' si lo prefieres
+      setUser(user);
+      navigate('/dashboard');
     } catch (error) {
-      console.error('Error al iniciar sesión:', error); // Mostrar el error en la consola
       setError(error.response?.data?.error || 'Error al iniciar sesión');
     }
   };

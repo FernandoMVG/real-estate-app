@@ -111,15 +111,19 @@ const deleteUser = async (req, res) => {
 // Nueva función para obtener el usuario autenticado
 const getAuthenticatedUser = async (req, res) => {
   try {
-    const userId = req.userId; // Asegúrate de que el middleware de autenticación está configurando `req.userId`
-    const user = await User.findById(userId).select('-password');
+    // Obtén el ID del usuario del token de autenticación
+    const userId = req.user.id;
+
+    const user = await User.findById(userId);
     if (!user) {
-      return res.status(404).json({ error: 'Usuario no encontrado' });
+      console.log('User not found at getAuthenticatedUser')
+      return res.status(404).json({ error: 'User not found' });
     }
-    res.status(200).json(user);
+
+    res.json(user);
   } catch (error) {
-    console.error('Error al obtener usuario autenticado:', error.message); // Log del error
-    res.status(500).json({ error: 'Error al obtener usuario autenticado' });
+    console.error(error);
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
 
@@ -128,5 +132,5 @@ module.exports = {
   readUser,
   updateUser,
   deleteUser,
-  getAuthenticatedUser,
+  getAuthenticatedUser // Asegurarse de exportar la función correcta
 };
