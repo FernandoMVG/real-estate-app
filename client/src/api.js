@@ -1,46 +1,40 @@
-// src/api.js
 import axios from 'axios';
+import Cookies from 'js-cookie';
 
 const api = axios.create({
-  baseURL: 'http://localhost:5000/api',
+  baseURL: 'http://localhost:3000', // Reemplaza con la URL de tu backend
+  withCredentials: true, // Para permitir que las cookies se envíen en las solicitudes CORS
 });
 
+// Interceptar solicitudes para incluir el token de autenticación
 api.interceptors.request.use(
   (config) => {
-    const accessToken = localStorage.getItem('accessToken');
-    if (accessToken) {
-      console.log('accessToken', accessToken);
-      config.headers.Authorization = `Bearer ${accessToken}`;
+    const token = Cookies.get('auth-token');
+    if (token) {
+      config.headers['Authorization'] = `Bearer ${token}`;
     }
     return config;
   },
-  (error) => Promise.reject(error)
-);
-
-api.interceptors.response.use(
-  (response) => response,
-  async (error) => {
-    const originalRequest = error.config;
-    if (error.response && error.response.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true;
-      try {
-        const refreshToken = localStorage.getItem('refreshToken');
-        if (!refreshToken) {
-          window.location.href = '/login';
-          return Promise.reject(error);
-        }
-        const response = await axios.post('http://localhost:5000/api/auth/refresh-token', { refreshToken });
-        const { accessToken } = response.data;
-        localStorage.setItem('accessToken', accessToken);
-        originalRequest.headers.Authorization = `Bearer ${accessToken}`;
-        return api(originalRequest);
-      } catch (refreshError) {
-        window.location.href = '/login';
-        return Promise.reject(refreshError);
-      }
-    }
-    return Promise.reject(error.response ? error.response.data : error);
+  (error) => {
+    return Promise.reject(error);
   }
 );
+
+// Nuevas funciones para autenticación
+export const login = async (email, password) => {
+    return await api.post('/auth/login', { email, password });
+};
+
+export const register = async (username, email, password) => {
+    return await api.post('/auth/register', { username, email, password });
+};
+
+export const refreshToken = async () => {
+    return await api.post('/auth/refresh-token');
+};
+
+export const logout = async () => {
+    return await api.post('/auth/logout');
+};
 
 export default api;

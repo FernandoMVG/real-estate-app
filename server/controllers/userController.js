@@ -1,8 +1,7 @@
 const User = require('../models/userModel');
 const Rental = require('../models/rentalModel');
-const { validateUser } = require('../middleware/validator');
+const {validateUser} = require('../middleware/validator');
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
 const saltRounds = 10;
 
 const createUser = async (req, res) => {
@@ -10,11 +9,11 @@ const createUser = async (req, res) => {
   if (error) {
     return res.status(400).json({ error: error.details[0].message });
   }
-
+  
   if (req.body.isAdmin !== undefined) {
     return res.status(403).json({ error: 'Setting isAdmin is not allowed.' });
   }
-
+  
   try {
     const newUser = new User(req.body);
     const hash = await bcrypt.hash(newUser.password, saltRounds);
@@ -25,14 +24,14 @@ const createUser = async (req, res) => {
     console.log('User created:', newUser);
     res.status(201).json(newUser);
   } catch (error) {
-    console.error(`Error saving new user: ${error.message}`);
+    console.error(`Error saving new property: ${error.message}`);
     res.status(500).json({ error: error.message });
   }
 };
 
 const updateUser = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { id } = req.params; 
     const updateFields = req.body;
 
     let user = await User.findById(id);
@@ -65,12 +64,13 @@ const updateUser = async (req, res) => {
 const readUser = async (req, res) => {
   try {
     const { id } = req.params;
-    const targetUser = await User.findById(id).select('-password -isAdmin');
+    const targetUser = await User.findById(id).select('-password -isAdmin -refreshToken');
     if (!targetUser) {
       return res.status(404).json({ error: "User not found" });
     }
     console.log('User found:', targetUser);
     res.status(200).json(targetUser);
+
   } catch (error) {
     console.error(`Error reading user: ${error.message}`);
     res.status(500).json({ error: error.message });
@@ -108,29 +108,6 @@ const deleteUser = async (req, res) => {
   }
 };
 
-// Nueva función para obtener el usuario autenticado
-const getAuthenticatedUser = async (req, res) => {
-  try {
-    // Obtén el ID del usuario del token de autenticación
-    const userId = req.user.id;
-
-    const user = await User.findById(userId);
-    if (!user) {
-      console.log('User not found at getAuthenticatedUser')
-      return res.status(404).json({ error: 'User not found' });
-    }
-
-    res.json(user);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-};
-
 module.exports = {
-  createUser,
-  readUser,
-  updateUser,
-  deleteUser,
-  getAuthenticatedUser // Asegurarse de exportar la función correcta
+  createUser, readUser ,updateUser, deleteUser
 };

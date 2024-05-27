@@ -1,12 +1,10 @@
-// src/components/PrivateRoute.js
-import React, { useContext } from 'react';
+import React from 'react';
 import { Navigate } from 'react-router-dom';
-import { AuthContext } from '../contexts/AuthContext';
+import Cookies from 'js-cookie';
 
 const PrivateRoute = ({ children }) => {
-  const { user } = useContext(AuthContext);
-  console.log('user privateroute', user);
-  return user ? children : <Navigate to="/login" />;
+  const token = Cookies.get('auth-token');
+  return token ? children : <Navigate to="/login" />;
 };
 
 export default PrivateRoute;

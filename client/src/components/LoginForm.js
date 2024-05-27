@@ -1,29 +1,30 @@
-// src/components/LoginForm.js
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
 import api from '../api';
-import { AuthContext } from '../contexts/AuthContext';
 
 const LoginForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
   const navigate = useNavigate();
-  const { setUser } = useContext(AuthContext);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    setError(null);
+    setError(null); // Clear previous error messages
 
     try {
       const response = await api.post('/auth/login', { email, password });
-      const { accessToken, refreshToken, user } = response.data;
-      console.log('accessToken at LoginForm component', accessToken);
-      localStorage.setItem('accessToken', accessToken);
-      localStorage.setItem('refreshToken', refreshToken);
-      setUser(user);
+      const { accessToken, refreshToken } = response.data; // Obtener los tokens de la respuesta
+
+      // Store the tokens in cookies
+      Cookies.set('auth-token', accessToken, { expires: 1 / 96 }); // Expires in 15 minutes
+      Cookies.set('refresh-token', refreshToken, { expires: 30 }); // Expires in 30 days
+
+      // Redirect the user to the dashboard
       navigate('/dashboard');
     } catch (error) {
+      console.error('Error al iniciar sesión:', error);
       setError(error.response?.data?.error || 'Error al iniciar sesión');
     }
   };
@@ -34,9 +35,7 @@ const LoginForm = () => {
         <h2 className="text-2xl font-bold text-center mb-4">Iniciar Sesión</h2>
         {error && <p className="text-red-500 text-center mb-4">{error}</p>}
         <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
-            Correo electrónico
-          </label>
+          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">Correo electrónico</label>
           <input
             type="email"
             id="email"
@@ -47,9 +46,7 @@ const LoginForm = () => {
           />
         </div>
         <div className="mb-6">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
-            Contraseña
-          </label>
+          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">Contraseña</label>
           <input
             type="password"
             id="password"
