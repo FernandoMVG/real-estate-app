@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
-import { useNavigate } from 'react-router-dom';
+import { logout } from '../api'; // Importa la función de logout
+import { Menu as MenuIcon } from '@mui/icons-material';
+import { AccountCircle as AccountCircleIcon } from '@mui/icons-material';
 
 const Navbar = ({ user, setUser }) => {
     const [scrolled, setScrolled] = useState(false);
+    const [menuOpen, setMenuOpen] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -17,11 +20,16 @@ const Navbar = ({ user, setUser }) => {
         };
     }, []);
 
-    const handleLogout = () => {
-        Cookies.remove('auth-token');
-        Cookies.remove('refresh-token');
-        setUser(null);
-        navigate('/');
+    const handleLogout = async () => {
+        try {
+            await logout(); // Llama a la función de logout
+            Cookies.remove('auth-token');
+            Cookies.remove('refresh-token');
+            setUser(null);
+            navigate('/');
+        } catch (err) {
+            console.error('Error logging out:', err);
+        }
     };
 
     return (
@@ -40,14 +48,40 @@ const Navbar = ({ user, setUser }) => {
                 </div>
                 <div className="flex items-center">
                     {user ? (
-                        <>
-                            <span className="mr-4">Hola, {user.username}</span>
-                            <button onClick={handleLogout} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
-                                Cerrar Sesión
-                            </button>
-                        </>
+                        <div className="flex items-center space-x-4">
+                            <span className="text-gray-800">Hola, {user.username}</span>
+                            <div className="relative">
+                                <button 
+                                    onClick={() => setMenuOpen(!menuOpen)} 
+                                    className="flex items-center space-x-2 bg-gray-200 hover:bg-gray-300 text-gray-600 font-bold py-2 px-4 rounded-full focus:outline-none"
+                                >
+                                    <MenuIcon className="w-6 h-6" />
+                                    <AccountCircleIcon className="w-8 h-8 rounded-full" />
+                                </button>
+                                {menuOpen && (
+                                    <div className="absolute right-0 mt-2 w-48 bg-white border rounded shadow-md">
+                                        <Link 
+                                            to="/profile" 
+                                            className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+                                            onClick={() => setMenuOpen(false)}
+                                        >
+                                            Perfil
+                                        </Link>
+                                        <button 
+                                            onClick={handleLogout} 
+                                            className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
+                                        >
+                                            Cerrar Sesión
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
                     ) : (
-                        <Link to="/login" className="btn-primary text-white bg-indigo-600 hover:bg-indigo-700 transition-colors duration-300 px-4 py-2 rounded-md">
+                        <Link
+                            to="/login"
+                            className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded"
+                        >
                             Iniciar Sesión
                         </Link>
                     )}

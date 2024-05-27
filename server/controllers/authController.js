@@ -38,10 +38,15 @@ const loginUser = async (req, res) => {
     res.cookie('auth-token', accessToken, { httpOnly: true, secure: true });
     res.cookie('refresh-token', refreshToken, { httpOnly: true, secure: true });
     res.status(200).json({
-        message: 'Login successful',
-        accessToken,
-        refreshToken
-    });
+            message: 'Login successful',
+            accessToken,
+            refreshToken,
+            user: {
+                _id: user._id,
+                username: user.username,
+                email: user.email
+            }
+        });
 }
 
 
@@ -60,7 +65,14 @@ const refreshToken = async (req, res) => {
         const newAccessToken = generateAccessToken(user);
 
         res.cookie('auth-token', newAccessToken, { httpOnly: true, secure: true });
-        res.json({ accessToken: newAccessToken});
+        res.status(200).json({ 
+            accessToken: newAccessToken,
+            user: {
+                _id: user._id,
+                username: user.username,
+                email: user.email
+            }
+        });
     } catch (error) {
         return res.status(403).send({ error: 'Invalid refresh token' });
     }

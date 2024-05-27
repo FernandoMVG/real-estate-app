@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import api from '../api';
 
-const Login = ({ setUser }) => {
+const Login = ({ setUser, setIsAuthenticated }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -14,16 +14,17 @@ const Login = ({ setUser }) => {
         try {
             const response = await api.post('/auth/login', { email, password });
             const { accessToken, refreshToken, user } = response.data;
-            console.log('response.data');
+
             // Store the tokens in cookies
             Cookies.set('auth-token', accessToken, { expires: 1 / 96 });
             Cookies.set('refresh-token', refreshToken, { expires: 30 });
 
             // Set the user state
             setUser(user);
+            setIsAuthenticated(true);
+            console.log('Logged in user:', user);
 
             // Redirect the user to the profile
-            console.log('navigate');
             navigate('/profile');
         } catch (err) {
             setError('Invalid email or password');
@@ -65,9 +66,6 @@ const Login = ({ setUser }) => {
                         Login
                     </button>
                 </div>
-                <p className="text-center text-gray-500 text-xs mt-4">
-                    Don't have an account? <Link to="/register" className="text-blue-500 hover:text-blue-700">Register here</Link>
-                </p>
             </form>
         </div>
     );

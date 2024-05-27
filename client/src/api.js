@@ -2,7 +2,7 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 
 const api = axios.create({
-  baseURL: 'http://localhost:3000', // Reemplaza con la URL de tu backend
+  baseURL: 'http://localhost:3000', // Asegúrate de que esta URL sea correcta
   withCredentials: true, // Para permitir que las cookies se envíen en las solicitudes CORS
 });
 
@@ -20,7 +20,6 @@ api.interceptors.request.use(
   }
 );
 
-// Nuevas funciones para autenticación
 export const login = async (email, password) => {
     return await api.post('/auth/login', { email, password });
 };

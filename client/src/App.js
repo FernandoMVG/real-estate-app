@@ -9,7 +9,6 @@ import PropertyDetailsBuy from './pages/PropertyDetailsBuy';
 import PropertyDetailsRent from './pages/PropertyDetailsRent';
 import Profile from './pages/Profile';
 import Login from './components/Login';
-import Register from './components/Register';
 import { refreshToken } from './api';
 
 const App = () => {
@@ -22,10 +21,12 @@ const App = () => {
                 const response = await refreshToken();
                 if (response.data.accessToken) {
                     setIsAuthenticated(true);
-                    setUser(response.data.user); // Suponiendo que el backend devuelve el usuario en el token refresh
+                    setUser(response.data.user); // Asegúrate de que el backend devuelva el usuario
+                    console.log('Authenticated user:', response.data.user.username);
                 }
             } catch (error) {
                 setIsAuthenticated(false);
+                console.error('Error refreshing token:', error);
             }
         };
         checkAuth();
@@ -42,9 +43,8 @@ const App = () => {
                     <Route path="/finance" element={<Finance />} />
                     <Route path="/property/buy/:id" element={<PropertyDetailsBuy />} />
                     <Route path="/property/rent/:id" element={<PropertyDetailsRent />} />
-                    <Route path="/profile" element={isAuthenticated ? <Profile /> : <Navigate to="/login" />} />
-                    <Route path="/login" element={isAuthenticated ? <Navigate to="/profile" /> : <Login setUser={setUser} />} />
-                    <Route path="/register" element={isAuthenticated ? <Navigate to="/profile" /> : <Register setUser={setUser} />} />
+                    <Route path="/profile" element={isAuthenticated ? <Profile user={user} /> : <Navigate to="/login" />} />
+                    <Route path="/login" element={isAuthenticated ? <Navigate to="/profile" /> : <Login setUser={setUser} setIsAuthenticated={setIsAuthenticated} />} />
                 </Routes>
             </div>
         </Router>

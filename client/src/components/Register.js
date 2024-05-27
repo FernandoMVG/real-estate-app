@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import api from '../api';
 
-const Register = () => {
+const Register = ({ setUser }) => {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -12,7 +12,13 @@ const Register = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await api.post('/auth/register', { username, email, password });
+            const response = await api.post('/auth/register', { username, email, password });
+            const { user } = response.data;
+
+            // Set the user state
+            setUser(user);
+
+            // Redirect the user to the login page
             navigate('/login');
         } catch (err) {
             setError('Registration failed');
@@ -66,7 +72,7 @@ const Register = () => {
                     </button>
                 </div>
                 <p className="text-center text-gray-500 text-xs mt-4">
-                    Already have an account? <a href="/login" className="text-blue-500 hover:text-blue-700">Login here</a>
+                    Already have an account? <Link to="/login" className="text-blue-500 hover:text-blue-700">Login here</Link>
                 </p>
             </form>
         </div>
