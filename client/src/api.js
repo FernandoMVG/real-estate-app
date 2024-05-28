@@ -36,4 +36,15 @@ export const logout = async () => {
     return await api.post('/auth/logout');
 };
 
+// Función para obtener la URL de la imagen desde MongoDB
+export const getImageUrlById = async (id) => {
+  try {
+    const response = await api.get(`/images/${id}`);
+    return response.data.url;
+  } catch (error) {
+    console.error('Error al obtener la URL de la imagen:', error);
+    return 'placeholder-image.jpg'; // Imagen de reserva en caso de error
+  }
+};
+
 export default api;
