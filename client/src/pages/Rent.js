@@ -13,7 +13,7 @@ const Rent = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize] = useState(5);
+  const [pageSize, setPageSize] = useState('');
   const [totalPages, setTotalPages] = useState(1);
   const [search, setSearch] = useState('');
   const [filters, setFilters] = useState({});
@@ -66,6 +66,11 @@ const Rent = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
+  const handleItemsPerPageChange = (event) => {
+    setPageSize(parseInt(event.target.value, 10));
+    setCurrentPage(1); // Resetear a la primera página cuando se cambie el límite
+  };
+
   return (
     <>
       <section className="relative h-full max-h-[640px] mb-8 xl:mb-15 bg-[#FFFFE0]  block rounded-lg shadow-lg overflow-hidden">
@@ -105,6 +110,22 @@ const Rent = () => {
             </IconButton>
           </div>
         </div>
+
+        <div className="flex justify-between items-center mb-4">
+          <label htmlFor="pageSize" className="mr-2">Propiedades por página:</label>
+          <select
+            id="pageSize"
+            value={pageSize}
+            onChange={handleItemsPerPageChange}
+            className="border border-gray-300 px-2 py-1 rounded-md"
+          >
+            <option value="5">5</option>
+            <option value="8">8</option>
+            <option value="10">10</option>
+            <option value="20">20</option>
+          </select>
+        </div>
+
         <Sidebar isOpen={isSidebarOpen} onClose={toggleSidebar}>
           <Filters onFilterChange={handleFilterChange} />
         </Sidebar>

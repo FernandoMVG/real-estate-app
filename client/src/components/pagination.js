@@ -17,17 +17,17 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
     <div className="flex justify-center items-center space-x-2 mt-4">
       <button
         onClick={handlePreviousPage}
-        className="px-3 py-1 bg-gray-200 text-gray-700 rounded hover:bg-gray-300"
+        className="px-3 py-1 bg-gray-200 text-gray-700 rounded"
         disabled={currentPage === 1}
       >
         Anterior
       </button>
-      <span className="text-gray-700">
+      <span>
         Página {currentPage} de {totalPages}
       </span>
       <button
         onClick={handleNextPage}
-        className="px-3 py-1 bg-gray-200 text-gray-700 rounded hover:bg-gray-300"
+        className="px-3 py-1 bg-gray-200 text-gray-700 rounded"
         disabled={currentPage === totalPages}
       >
         Siguiente
