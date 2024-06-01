@@ -9,7 +9,6 @@ import PropertyDetailsBuy from './pages/PropertyDetailsBuy';
 import PropertyDetailsRent from './pages/PropertyDetailsRent';
 import Profile from './pages/Profile';
 import Login from './components/Login';
-import SellProperty from './pages/SellProperty'; // Importa el nuevo componente
 import { refreshToken } from './api';
 
 const App = () => {
@@ -46,7 +45,6 @@ const App = () => {
                     <Route path="/property/rent/:id" element={<PropertyDetailsRent />} />
                     <Route path="/profile" element={isAuthenticated ? <Profile user={user} /> : <Navigate to="/login" />} />
                     <Route path="/login" element={isAuthenticated ? <Navigate to="/profile" /> : <Login setUser={setUser} setIsAuthenticated={setIsAuthenticated} />} />
-                    <Route path="/sell-property" element={isAuthenticated ? <SellProperty /> : <Navigate to="/login" />} /> {/* Nueva ruta */}
                 </Routes>
             </div>
         </Router>
